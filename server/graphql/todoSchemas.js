@@ -5,7 +5,6 @@ var GraphQLObjectType = require('graphql').GraphQLObjectType;
 var GraphQLNonNull = require('graphql').GraphQLNonNull;
 var GraphQLID = require('graphql').GraphQLID;
 var GraphQLString = require('graphql').GraphQLString;
-var GraphQLBoolean = require('graphql').GraphQLBoolean;
 var GraphQLInt = require('graphql').GraphQLInt;
 var GraphQLDate = require('graphql-date');
 var TodoModel = require('../models/Todo');
@@ -24,7 +23,7 @@ const todoType = new GraphQLObjectType({
         type: GraphQLString
       },
       completed: {
-        type: GraphQLBoolean
+        type: GraphQLString
       },
       updated_date: {
         type: GraphQLDate
@@ -81,7 +80,7 @@ const mutation = new GraphQLObjectType({
             type: new GraphQLNonNull(GraphQLString)
           },
           completed: {
-            type: new GraphQLNonNull(GraphQLBoolean)
+            type: new GraphQLNonNull(GraphQLString)
           }
         },
         resolve: function (root, params) {
@@ -107,7 +106,7 @@ const mutation = new GraphQLObjectType({
             type: new GraphQLNonNull(GraphQLString)
           },
           completed: {
-            type: new GraphQLNonNull(GraphQLBoolean)
+            type: new GraphQLNonNull(GraphQLString)
           }
         },
         resolve(root, params) {
