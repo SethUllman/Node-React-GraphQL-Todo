@@ -115,9 +115,24 @@ const mutation = new GraphQLObjectType({
           });
         }
       },
-      
+      removeTodo: {
+        type: todoType,
+        args: {
+          id: {
+            name: 'id',
+            type: new GraphQLNonNull(GraphQLString)
+          }
+        },
+        resolve(root, params) {
+          const remTodo = TodoModel.findByIdAndRemove(params.id).exec();
+          if (!remTodo) {
+            throw new Error('Error')
+          }
+          return remTodo;
+        }
+      }
     }
   }
-})
+});
 
-module.exports = new GraphQLSchema({query: queryType});
+module.exports = new GraphQLSchema({query: queryType, mutation: mutation});
