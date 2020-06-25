@@ -1,13 +1,14 @@
-const GraphQLSchema = require('graphql').GraphQLSchema;
-const GraphQLObjectType = require('graphql').GraphQLObjectType;
-const GraphQLList = require('graphql').GraphQLList;
-const GraphQLObjectType = require('graphql').GraphQLObjectType;
-const GraphQLNonNull = require('graphql').GraphQLNonNull;
-const GraphQLID = require('graphql').GraphQLID;
-const GraphQLString = require('graphql').GraphQLString;
-const GraphQLInt = require('graphql').GraphQLInt;
-const GraphQLDate = require('graphql-date');
-const BookModel = require('../models/Todo');
+var GraphQLSchema = require('graphql').GraphQLSchema;
+var GraphQLObjectType = require('graphql').GraphQLObjectType;
+var GraphQLList = require('graphql').GraphQLList;
+var GraphQLObjectType = require('graphql').GraphQLObjectType;
+var GraphQLNonNull = require('graphql').GraphQLNonNull;
+var GraphQLID = require('graphql').GraphQLID;
+var GraphQLString = require('graphql').GraphQLString;
+var GraphQLBoolean = require('graphql').GraphQLBoolean;
+var GraphQLInt = require('graphql').GraphQLInt;
+var GraphQLDate = require('graphql-date');
+var TodoModel = require('../models/Todo');
 
 const todoType = new GraphQLObjectType({
   name: 'todo',
@@ -36,7 +37,7 @@ const queryType = new GraphQLObjectType({
   name: 'Query',
   fields: function () {
     return {
-      todo: {
+      todos: {
         type: new GraphQLList(todoType),
         resolve: function () {
           const todos = TodoModel.find().exec()
@@ -110,7 +111,7 @@ const mutation = new GraphQLObjectType({
           }
         },
         resolve(root, params) {
-          return TodoModel.findByIdAndUpdate(params.id, { isbn: params.isbn, title: params.title, description: params.description, completed: params.completed, updated_date: new Date() }, function (err) {
+          return TodoModel.findByIdAndUpdate(params.id, { title: params.title, description: params.description, completed: params.completed, updated_date: new Date() }, function (err) {
             if (err) return next(err);
           });
         }
