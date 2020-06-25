@@ -66,4 +66,58 @@ const queryType = new GraphQLObjectType({
   }
 });
 
+const mutation = new GraphQLObjectType({
+  name: 'Mutation',
+  fields: function () {
+    return {
+      addTodo: {
+        type: todoType,
+        args: {
+          title: {
+            type: new GraphQLNonNull(GraphQLString)
+          },
+          description: {
+            type: new GraphQLNonNull(GraphQLString)
+          },
+          completed: {
+            type: new GraphQLNonNull(GraphQLBoolean)
+          }
+        },
+        resolve: function (root, params) {
+          const todoModel = new TodoModel(params);
+          const newTodo = todoModel.save();
+          if (!newTodo) {
+            throw new Error('Error');
+          }
+          return newTodo
+        }
+      },
+      updateTodo: {
+        type: todoType,
+        args: {
+          id: {
+            name: 'id',
+            type: new GraphQLNonNull(GraphQLString)
+          },
+          title: {
+            type: new GraphQLNonNull(GraphQLString)
+          },
+          description: {
+            type: new GraphQLNonNull(GraphQLString)
+          },
+          completed: {
+            type: new GraphQLNonNull(GraphQLBoolean)
+          }
+        },
+        resolve(root, params) {
+          return TodoModel.findByIdAndUpdate(params.id, { isbn: params.isbn, title: params.title, description: params.description, completed: params.completed, updated_date: new Date() }, function (err) {
+            if (err) return next(err);
+          });
+        }
+      },
+      
+    }
+  }
+})
+
 module.exports = new GraphQLSchema({query: queryType});
